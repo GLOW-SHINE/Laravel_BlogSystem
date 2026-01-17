@@ -4,9 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
+
+    public function adminDashboard()
+    {
+        $data = [
+            'pageTitle' => 'Dashboard'
+        ];
+
+        return view('back.pages.dashboard', $data);
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -61,5 +72,18 @@ class AdminController extends Controller
     public function destroy(Admin $admin)
     {
         //
+    }
+
+
+     /**
+     * Logout the specified resource from storage.
+     */
+
+    public function logoutHandler(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect()->route('admin.login')->with('fail','You Are now Logged out...!');
     }
 }
